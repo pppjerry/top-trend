@@ -1306,6 +1306,328 @@
           "url": "https://s.weibo.com/weibo?q=%23凌晨4点起床吃年夜饭是什么体验%23"
         }
       ]
+    },
+    {
+      "timestamp": "2026-02-18T04:19:14+08:00",
+      "items": [
+        {
+          "rank": 1,
+          "title": "B站春晚 夯",
+          "hotValue": 100902,
+          "url": "https://s.weibo.com/weibo?q=%23B站春晚 夯%23",
+          "category": "热"
+        },
+        {
+          "rank": 2,
+          "title": "张瑞阳女单短节目59.38分",
+          "hotValue": 41868,
+          "url": "https://s.weibo.com/weibo?q=%23张瑞阳女单短节目59.38分%23"
+        },
+        {
+          "rank": 3,
+          "title": "2026新春走基层",
+          "hotValue": 32412,
+          "url": "https://s.weibo.com/weibo?q=%232026新春走基层%23"
+        },
+        {
+          "rank": 4,
+          "title": "宋小宝 小品翻车",
+          "hotValue": 32177,
+          "url": "https://s.weibo.com/weibo?q=%23宋小宝 小品翻车%23",
+          "category": "热"
+        },
+        {
+          "rank": 5,
+          "title": "都穿亮片裙不告诉王玉雯",
+          "hotValue": 32074,
+          "url": "https://s.weibo.com/weibo?q=%23都穿亮片裙不告诉王玉雯%23",
+          "category": "热"
+        },
+        {
+          "rank": 6,
+          "title": "镖人 真的好看",
+          "hotValue": 31866,
+          "url": "https://s.weibo.com/weibo?q=%23镖人 真的好看%23"
+        },
+        {
+          "rank": 7,
+          "title": "3人编造低俗剧本直播引流被罚",
+          "hotValue": 30660,
+          "url": "https://s.weibo.com/weibo?q=%233人编造低俗剧本直播引流被罚%23"
+        },
+        {
+          "rank": 8,
+          "title": "张瑞阳女单晋级自由滑",
+          "hotValue": 30142,
+          "url": "https://s.weibo.com/weibo?q=%23张瑞阳女单晋级自由滑%23",
+          "category": "新"
+        },
+        {
+          "rank": 9,
+          "title": "中国速滑男团铜牌",
+          "hotValue": 28579,
+          "url": "https://s.weibo.com/weibo?q=%23中国速滑男团铜牌%23"
+        },
+        {
+          "rank": 10,
+          "title": "很火但难吃的小吃",
+          "hotValue": 28250,
+          "url": "https://s.weibo.com/weibo?q=%23很火但难吃的小吃%23"
+        },
+        {
+          "rank": 11,
+          "title": "三文鱼其实是海底大肥猪",
+          "hotValue": 23359,
+          "url": "https://s.weibo.com/weibo?q=%23三文鱼其实是海底大肥猪%23"
+        },
+        {
+          "rank": 12,
+          "title": "今年所有法定假日全与周末重合",
+          "hotValue": 23346,
+          "url": "https://s.weibo.com/weibo?q=%23今年所有法定假日全与周末重合%23",
+          "category": "热"
+        },
+        {
+          "rank": 13,
+          "title": "王菲化妆师改口问就是AI",
+          "hotValue": 23263,
+          "url": "https://s.weibo.com/weibo?q=%23王菲化妆师改口问就是AI%23",
+          "category": "热"
+        },
+        {
+          "rank": 14,
+          "title": "肖战好漂亮",
+          "hotValue": 23198,
+          "url": "https://s.weibo.com/weibo?q=%23肖战好漂亮%23"
+        },
+        {
+          "rank": 15,
+          "title": "B站小品 笑力竭了",
+          "hotValue": 23186,
+          "url": "https://s.weibo.com/weibo?q=%23B站小品 笑力竭了%23"
+        },
+        {
+          "rank": 16,
+          "title": "冬奥会露内衣品牌女选手引来广告商",
+          "hotValue": 23091,
+          "url": "https://s.weibo.com/weibo?q=%23冬奥会露内衣品牌女选手引来广告商%23"
+        },
+        {
+          "rank": 17,
+          "title": "沙溢给白鹿发了多少压岁钱",
+          "hotValue": 23082,
+          "url": "https://s.weibo.com/weibo?q=%23沙溢给白鹿发了多少压岁钱%23"
+        },
+        {
+          "rank": 18,
+          "title": "全国初二回娘家的女婿belike",
+          "hotValue": 22052,
+          "url": "https://s.weibo.com/weibo?q=%23全国初二回娘家的女婿belike%23"
+        },
+        {
+          "rank": 19,
+          "title": "千万别贪便宜买监控",
+          "hotValue": 21373,
+          "url": "https://s.weibo.com/weibo?q=%23千万别贪便宜买监控%23"
+        },
+        {
+          "rank": 20,
+          "title": "比艺人还帅的韩国花滑天才",
+          "hotValue": 21184,
+          "url": "https://s.weibo.com/weibo?q=%23比艺人还帅的韩国花滑天才%23"
+        },
+        {
+          "rank": 21,
+          "title": "B站语言类节目 赢麻了",
+          "hotValue": 21172,
+          "url": "https://s.weibo.com/weibo?q=%23B站语言类节目 赢麻了%23"
+        },
+        {
+          "rank": 22,
+          "title": "金价",
+          "hotValue": 21084,
+          "url": "https://s.weibo.com/weibo?q=%23金价%23",
+          "category": "热"
+        },
+        {
+          "rank": 23,
+          "title": "马斯克机器人涉色情被爱尔兰调查",
+          "hotValue": 20968,
+          "url": "https://s.weibo.com/weibo?q=%23马斯克机器人涉色情被爱尔兰调查%23",
+          "category": "热"
+        },
+        {
+          "rank": 24,
+          "title": "金价银价直线跳水",
+          "hotValue": 20887,
+          "url": "https://s.weibo.com/weibo?q=%23金价银价直线跳水%23"
+        },
+        {
+          "rank": 25,
+          "title": "中国游客被困俄罗斯极光村超40小时",
+          "hotValue": 20789,
+          "url": "https://s.weibo.com/weibo?q=%23中国游客被困俄罗斯极光村超40小时%23"
+        },
+        {
+          "rank": 26,
+          "title": "飞驰人生",
+          "hotValue": 20756,
+          "url": "https://s.weibo.com/weibo?q=%23飞驰人生%23"
+        },
+        {
+          "rank": 27,
+          "title": "成何体统",
+          "hotValue": 20629,
+          "url": "https://s.weibo.com/weibo?q=%23成何体统%23"
+        },
+        {
+          "rank": 28,
+          "title": "四代娃娃",
+          "hotValue": 20587,
+          "url": "https://s.weibo.com/weibo?q=%23四代娃娃%23",
+          "category": "新"
+        },
+        {
+          "rank": 29,
+          "title": "唐宫奇案",
+          "hotValue": 20318,
+          "url": "https://s.weibo.com/weibo?q=%23唐宫奇案%23",
+          "category": "新"
+        },
+        {
+          "rank": 30,
+          "title": "速度滑冰",
+          "hotValue": 19561,
+          "url": "https://s.weibo.com/weibo?q=%23速度滑冰%23"
+        },
+        {
+          "rank": 31,
+          "title": "95后女生上门做年夜饭爆单月入4万",
+          "hotValue": 19270,
+          "url": "https://s.weibo.com/weibo?q=%2395后女生上门做年夜饭爆单月入4万%23"
+        },
+        {
+          "rank": 32,
+          "title": "不是年味淡了而是轮到我们做主了",
+          "hotValue": 19194,
+          "url": "https://s.weibo.com/weibo?q=%23不是年味淡了而是轮到我们做主了%23"
+        },
+        {
+          "rank": 33,
+          "title": "正确走路姿势是用臀而不是腿",
+          "hotValue": 18681,
+          "url": "https://s.weibo.com/weibo?q=%23正确走路姿势是用臀而不是腿%23"
+        },
+        {
+          "rank": 34,
+          "title": "成何体统 与妻书",
+          "hotValue": 18647,
+          "url": "https://s.weibo.com/weibo?q=%23成何体统 与妻书%23"
+        },
+        {
+          "rank": 35,
+          "title": "俄罗斯警告欧洲大国",
+          "hotValue": 18489,
+          "url": "https://s.weibo.com/weibo?q=%23俄罗斯警告欧洲大国%23"
+        },
+        {
+          "rank": 36,
+          "title": "易烊千玺台词含金量",
+          "hotValue": 18359,
+          "url": "https://s.weibo.com/weibo?q=%23易烊千玺台词含金量%23"
+        },
+        {
+          "rank": 37,
+          "title": "瞿颖胡兵 为啥没在一起",
+          "hotValue": 17872,
+          "url": "https://s.weibo.com/weibo?q=%23瞿颖胡兵 为啥没在一起%23"
+        },
+        {
+          "rank": 38,
+          "title": "年度女演员杨幂",
+          "hotValue": 16668,
+          "url": "https://s.weibo.com/weibo?q=%23年度女演员杨幂%23"
+        },
+        {
+          "rank": 39,
+          "title": "B站春晚",
+          "hotValue": 16379,
+          "url": "https://s.weibo.com/weibo?q=%23B站春晚%23"
+        },
+        {
+          "rank": 40,
+          "title": "惊蛰",
+          "hotValue": 16103,
+          "url": "https://s.weibo.com/weibo?q=%23惊蛰%23"
+        },
+        {
+          "rank": 41,
+          "title": "山东一村600多人集体磕头拜年",
+          "hotValue": 15961,
+          "url": "https://s.weibo.com/weibo?q=%23山东一村600多人集体磕头拜年%23"
+        },
+        {
+          "rank": 42,
+          "title": "还是B站春晚敢演",
+          "hotValue": 15950,
+          "url": "https://s.weibo.com/weibo?q=%23还是B站春晚敢演%23"
+        },
+        {
+          "rank": 43,
+          "title": "虞书欣云初令拜年照",
+          "hotValue": 15808,
+          "url": "https://s.weibo.com/weibo?q=%23虞书欣云初令拜年照%23"
+        },
+        {
+          "rank": 44,
+          "title": "广州烟花",
+          "hotValue": 15807,
+          "url": "https://s.weibo.com/weibo?q=%23广州烟花%23"
+        },
+        {
+          "rank": 45,
+          "title": "镖人打戏",
+          "hotValue": 15805,
+          "url": "https://s.weibo.com/weibo?q=%23镖人打戏%23",
+          "category": "新"
+        },
+        {
+          "rank": 46,
+          "title": "王菲同款耳环官网售罄",
+          "hotValue": 15803,
+          "url": "https://s.weibo.com/weibo?q=%23王菲同款耳环官网售罄%23"
+        },
+        {
+          "rank": 47,
+          "title": "母女过年炸丸子变大型翻车现场",
+          "hotValue": 15803,
+          "url": "https://s.weibo.com/weibo?q=%23母女过年炸丸子变大型翻车现场%23"
+        },
+        {
+          "rank": 48,
+          "title": "镖人 武侠群像",
+          "hotValue": 15800,
+          "url": "https://s.weibo.com/weibo?q=%23镖人 武侠群像%23"
+        },
+        {
+          "rank": 49,
+          "title": "北京台春晚",
+          "hotValue": 15800,
+          "url": "https://s.weibo.com/weibo?q=%23北京台春晚%23"
+        },
+        {
+          "rank": 50,
+          "title": "凌晨4点起床吃年夜饭是什么体验",
+          "hotValue": 15796,
+          "url": "https://s.weibo.com/weibo?q=%23凌晨4点起床吃年夜饭是什么体验%23"
+        },
+        {
+          "rank": 51,
+          "title": "中国队速度滑冰男子团体摘铜",
+          "hotValue": 15795,
+          "url": "https://s.weibo.com/weibo?q=%23中国队速度滑冰男子团体摘铜%23"
+        }
+      ]
     }
   ]
 }
