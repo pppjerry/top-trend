@@ -1,11 +1,13 @@
 name: Deploy Pages
 
 on:
+  workflow_run:
+    workflows: ["Scrape Hot Trends"]
+    types: [completed]
   push:
     branches: ["main"]
     paths:
       - "web/**"
-      - "data/**"
       - ".github/workflows/deploy-pages.yml"
   workflow_dispatch: {}
 
@@ -20,17 +22,48 @@ concurrency:
 
 jobs:
   build:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Prepare artifact
         run: |
           rm -rf dist
           mkdir -p dist
           cp -R web/. dist/
-          cp -R data dist/data
+          mkdir -p dist/data
+
+          if [ -d data ]; then
+            cp -R data/. dist/data/
+          else
+            echo "data/ not found, creating fallback files for frontend."
+          fi
+
+          if [ ! -f dist/data/index.json ]; then
+            cat > dist/data/index.json <<'EOF'
+            {
+              "sources": [],
+              "dates": {},
+              "lastUpdated": ""
+            }
+            EOF
+          fi
+
+          if [ ! -f dist/data/status.json ]; then
+            cat > dist/data/status.json <<'EOF'
+            {
+              "ok": false,
+              "lastRunAt": "",
+              "lastSuccessAt": "",
+              "message": "No run yet",
+              "sourceResults": []
+            }
+            EOF
+          fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
