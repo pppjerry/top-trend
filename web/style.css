@@ -1,0 +1,35 @@
+.tab-btn {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  padding: 0.4rem 0.9rem;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.tab-btn:hover {
+  background: #f8fafc;
+}
+
+.tab-active {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.rank-up {
+  color: #16a34a;
+}
+
+.rank-down {
+  color: #dc2626;
+}
+
+.rank-new {
+  color: #ea580c;
+}
+
+.stat-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  background: #f8fafc;
+}
