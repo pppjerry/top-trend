@@ -36,8 +36,21 @@ function fmtTime(iso) {
     .padStart(2, "0")}`;
 }
 
+function formatDateTime(iso) {
+  if (!iso || iso === "-") return "-";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mi = String(d.getMinutes()).padStart(2, "0");
+  const ss = String(d.getSeconds()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
+}
+
 function setLastUpdated(text) {
-  document.getElementById("lastUpdated").textContent = `更新时间: ${text}`;
+  document.getElementById("lastUpdated").textContent = `更新时间: ${formatDateTime(text)}`;
 }
 
 function setStatusBanner(message) {
@@ -168,7 +181,7 @@ function renderStatusBanner(status) {
   const staleMinutes = minutesDiffFromNow(status.lastRunAt);
   if (status.ok === false) {
     setStatusBanner(
-      `抓取任务最近一次执行失败。${status.message || ""} 最近执行时间: ${status.lastRunAt || "-"}`,
+      `抓取任务最近一次执行失败。${status.message || ""} 最近执行时间: ${formatDateTime(status.lastRunAt)}`,
     );
     return;
   }
@@ -275,7 +288,7 @@ function renderStats(points) {
     Math.round((new Date(last.timestamp) - new Date(first.timestamp)) / 60000),
   );
   el.innerHTML = `
-    <div class="stat-card"><div class="text-xs text-slate-500">首次上榜</div><div>${first.timestamp}</div></div>
+    <div class="stat-card"><div class="text-xs text-slate-500">首次上榜</div><div>${formatDateTime(first.timestamp)}</div></div>
     <div class="stat-card"><div class="text-xs text-slate-500">当前排名</div><div>${last.rank}</div></div>
     <div class="stat-card"><div class="text-xs text-slate-500">最高排名</div><div>${best}</div></div>
     <div class="stat-card"><div class="text-xs text-slate-500">在榜时长</div><div>${durationMinutes} 分钟</div></div>
@@ -317,12 +330,15 @@ function renderTrendChart(points, keyword) {
     yAxis: {
       type: "value",
       inverse: true,
-      min: 1,
+      min: (v) => Math.max(1, Math.floor(v.min)),
+      max: (v) => {
+        const ceilMax = Math.ceil(v.max);
+        return ceilMax === Math.floor(v.min) ? ceilMax + 1 : ceilMax;
+      },
+      interval: 1,
       minInterval: 1,
       name: "排名",
-      axisLabel: {
-        formatter: (value) => String(Math.round(value)),
-      },
+      axisLabel: { formatter: "{value}" },
     },
     series: [
       {
@@ -369,7 +385,7 @@ function setupHistory(dayData) {
 
   const snapshots = dayData.snapshots || [];
   snapshotSelect.innerHTML = snapshots
-    .map((snap, idx) => `<option value="${idx}">${snap.timestamp}</option>`)
+    .map((snap, idx) => `<option value="${idx}">${formatDateTime(snap.timestamp)}</option>`)
     .join("");
 
   const render = (idx) => {

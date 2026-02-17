@@ -2,7 +2,7 @@ name: Scrape Hot Trends
 
 on:
   schedule:
-    - cron: "*/20 * * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch: {}
 
 jobs:
@@ -27,6 +27,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "actions@github.com"
+          git remote set-url origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
           git add data/
           git diff --staged --quiet || git commit -m "data: update $(date -u +%Y-%m-%dT%H:%M)"
-          git push
+          git push origin HEAD:${{ github.ref_name }}
