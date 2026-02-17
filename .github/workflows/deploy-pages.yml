@@ -44,25 +44,21 @@ jobs:
           fi
 
           if [ ! -f dist/data/index.json ]; then
-            cat > dist/data/index.json <<'EOF'
-            {
-              "sources": [],
-              "dates": {},
-              "lastUpdated": ""
-            }
-            EOF
+            printf '%s\n' '{' \
+              '  "sources": [],' \
+              '  "dates": {},' \
+              '  "lastUpdated": ""' \
+              '}' > dist/data/index.json
           fi
 
           if [ ! -f dist/data/status.json ]; then
-            cat > dist/data/status.json <<'EOF'
-            {
-              "ok": false,
-              "lastRunAt": "",
-              "lastSuccessAt": "",
-              "message": "No run yet",
-              "sourceResults": []
-            }
-            EOF
+            printf '%s\n' '{' \
+              '  "ok": false,' \
+              '  "lastRunAt": "",' \
+              '  "lastSuccessAt": "",' \
+              '  "message": "No run yet",' \
+              '  "sourceResults": []' \
+              '}' > dist/data/status.json
           fi
 
       - name: Upload Pages artifact
