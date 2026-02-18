@@ -10,8 +10,11 @@ const MAX_RECENT_KEYWORDS = 5;
 const state = {
   index: null,
   dayDataCache: new Map(),
+  mergedSnapshotsCache: new Map(),
+  itemLibraryCache: new Map(),
   source: "weibo",
   currentDayData: null,
+  currentLibrary: null,
   recentKeywords: [],
 };
 let rankChart = null;
@@ -118,7 +121,7 @@ function renderRecentKeywords() {
   el.querySelectorAll(".recent-keyword-btn").forEach((btn) => {
     btn.onclick = () => {
       const keyword = decodeURIComponent(btn.dataset.keyword || "");
-      runTrendAnalysis(keyword);
+      void runTrendAnalysis(keyword);
     };
   });
 }
@@ -204,6 +207,41 @@ async function loadDay(source, date) {
   return data;
 }
 
+async function loadAllSnapshotsBySource(source) {
+  const dates = state.index?.dates?.[source] || [];
+  if (!dates.length) return [];
+
+  const cacheKey = `${source}:${dates.join(",")}`;
+  if (state.mergedSnapshotsCache.has(cacheKey)) {
+    return state.mergedSnapshotsCache.get(cacheKey);
+  }
+
+  const dayPayloads = await Promise.all(dates.map((date) => loadDay(source, date)));
+  const snapshots = dayPayloads
+    .flatMap((payload) => payload?.snapshots || [])
+    .slice()
+    .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+
+  state.mergedSnapshotsCache.set(cacheKey, snapshots);
+  return snapshots;
+}
+
+async function loadItemLibrary(source) {
+  if (state.itemLibraryCache.has(source)) {
+    return state.itemLibraryCache.get(source);
+  }
+
+  try {
+    const payload = await fetchJson(`${DATA_BASE}/derived/${source}/items.json`);
+    state.itemLibraryCache.set(source, payload);
+    return payload;
+  } catch (_) {
+    const fallback = { source, generatedAt: "", totalItems: 0, items: [] };
+    state.itemLibraryCache.set(source, fallback);
+    return fallback;
+  }
+}
+
 function getRankChangeMap(prevItems) {
   const map = new Map();
   prevItems.forEach((it) => map.set(it.title, it.rank));
@@ -215,6 +253,12 @@ function changeLabel(currRank, prevRank) {
   if (currRank < prevRank) return `<span class="rank-up">↑ ${prevRank - currRank}</span>`;
   if (currRank > prevRank) return `<span class="rank-down">↓ ${currRank - prevRank}</span>`;
   return `<span class="text-slate-400">-</span>`;
+}
+
+function itemStatusLabel(status, comebackCount) {
+  if (status === "on_list") return `<span class="text-green-600">在榜中</span>`;
+  if (comebackCount > 0) return `<span class="text-purple-600">已掉榜(曾回榜)</span>`;
+  return `<span class="text-slate-500">已掉榜</span>`;
 }
 
 function renderRealtime(dayData) {
@@ -252,16 +296,97 @@ function renderRealtime(dayData) {
   listEl.querySelectorAll(".trend-btn").forEach((btn) => {
     btn.onclick = () => {
       const keyword = decodeURIComponent(btn.dataset.keyword || "");
-      runTrendAnalysis(keyword);
+      void runTrendAnalysis(keyword);
     };
   });
 
   setLastUpdated(latest.timestamp);
 }
 
-function collectSeries(dayData, keyword) {
+function getLibraryFilteredItems() {
+  const sourceItems = state.currentLibrary?.items || [];
+  const keyword = (document.getElementById("librarySearch")?.value || "").trim().toLowerCase();
+  const status = document.getElementById("libraryStatus")?.value || "all";
+  const sortBy = document.getElementById("librarySort")?.value || "lastSeenDesc";
+
+  let items = sourceItems.filter((item) => item.title?.toLowerCase().includes(keyword));
+
+  if (status === "on_list") {
+    items = items.filter((item) => item.status === "on_list");
+  } else if (status === "off_list") {
+    items = items.filter((item) => item.status === "off_list");
+  } else if (status === "comeback") {
+    items = items.filter((item) => (item.comebackCount || 0) > 0);
+  }
+
+  const parseTime = (text) => new Date(text || "").getTime() || 0;
+  const numOrMax = (val) => (typeof val === "number" ? val : Number.MAX_SAFE_INTEGER);
+
+  items.sort((a, b) => {
+    if (sortBy === "peakRankAsc") return numOrMax(a.peakRank) - numOrMax(b.peakRank);
+    if (sortBy === "durationDesc") return (b.onListDurationMinutes || 0) - (a.onListDurationMinutes || 0);
+    if (sortBy === "comebackDesc") return (b.comebackCount || 0) - (a.comebackCount || 0);
+    return parseTime(b.lastSeenAt) - parseTime(a.lastSeenAt);
+  });
+
+  return items;
+}
+
+function renderLibrary() {
+  const metaEl = document.getElementById("libraryMeta");
+  const tableEl = document.getElementById("libraryTable");
+  const generatedAt = state.currentLibrary?.generatedAt || "";
+  const filtered = getLibraryFilteredItems();
+
+  const total = state.currentLibrary?.totalItems || 0;
+  metaEl.textContent = `共 ${total} 个词条，当前筛选后 ${filtered.length} 个。生成时间: ${formatDateTime(generatedAt)}`;
+
+  if (!filtered.length) {
+    tableEl.innerHTML = `<tr><td colspan="9" class="py-3 text-slate-400">暂无匹配词条</td></tr>`;
+    return;
+  }
+
+  tableEl.innerHTML = filtered
+    .map(
+      (item) => `<tr class="border-b">
+        <td class="py-2">${item.title || "-"}</td>
+        <td class="py-2">${itemStatusLabel(item.status, item.comebackCount || 0)}</td>
+        <td class="py-2">${formatDateTime(item.firstSeenAt)}</td>
+        <td class="py-2">${formatDateTime(item.lastSeenAt)}</td>
+        <td class="py-2">${item.peakRank ?? "-"}</td>
+        <td class="py-2">${item.onListDurationMinutes ?? 0} 分钟</td>
+        <td class="py-2">${item.comebackCount ?? 0}</td>
+        <td class="py-2">${item.currentRank ?? "-"}</td>
+        <td class="py-2">
+          <button class="rounded border border-blue-200 px-2 py-1 text-xs text-blue-600 hover:bg-blue-50 library-trend-btn" data-keyword="${encodeURIComponent(item.title || "")}">
+            趋势分析
+          </button>
+        </td>
+      </tr>`,
+    )
+    .join("");
+
+  tableEl.querySelectorAll(".library-trend-btn").forEach((btn) => {
+    btn.onclick = () => {
+      const keyword = decodeURIComponent(btn.dataset.keyword || "");
+      void runTrendAnalysis(keyword);
+    };
+  });
+}
+
+function setupLibraryControls() {
+  const search = document.getElementById("librarySearch");
+  const status = document.getElementById("libraryStatus");
+  const sort = document.getElementById("librarySort");
+
+  search.oninput = () => renderLibrary();
+  status.onchange = () => renderLibrary();
+  sort.onchange = () => renderLibrary();
+}
+
+function collectSeries(snapshots, keyword) {
   const points = [];
-  for (const snap of dayData.snapshots || []) {
+  for (const snap of snapshots || []) {
     const found = (snap.items || []).find((i) => i.title.includes(keyword));
     if (found) {
       points.push({
@@ -354,11 +479,15 @@ function renderTrendChart(points, keyword) {
   setTimeout(() => rankChart.resize(), 0);
 }
 
-function runTrendAnalysis(keyword, dayData = state.currentDayData) {
-  if (!keyword || !dayData) return;
+async function runTrendAnalysis(keyword) {
+  if (!keyword) return;
+  const source = state.source;
+  const snapshots = await loadAllSnapshotsBySource(source);
+  if (!snapshots.length) return;
+
   const input = document.getElementById("keywordInput");
   input.value = keyword;
-  const points = collectSeries(dayData, keyword);
+  const points = collectSeries(snapshots, keyword);
   switchTab("trend");
   renderStats(points);
   renderTrendChart(points, keyword);
@@ -370,7 +499,7 @@ function setupTrendSearch() {
   const btn = document.getElementById("keywordBtn");
   const run = () => {
     const keyword = input.value.trim();
-    runTrendAnalysis(keyword);
+    void runTrendAnalysis(keyword);
   };
   btn.onclick = run;
   input.onkeydown = (e) => {
@@ -412,7 +541,7 @@ function setupHistory(dayData) {
     list.querySelectorAll(".history-trend-btn").forEach((btn) => {
       btn.onclick = () => {
         const keyword = decodeURIComponent(btn.dataset.keyword || "");
-        runTrendAnalysis(keyword, dayData);
+        void runTrendAnalysis(keyword);
       };
     });
   };
@@ -441,6 +570,8 @@ function initDateOptions() {
 async function reloadForSource(source) {
   state.source = source;
   const defaultDate = initDateOptions();
+  state.currentLibrary = await loadItemLibrary(state.source);
+  renderLibrary();
 
   if (!defaultDate) {
     state.currentDayData = null;
@@ -466,6 +597,7 @@ async function bootstrap() {
   const status = await loadStatus();
   renderStatusBanner(status);
   setupTrendSearch();
+  setupLibraryControls();
   renderRecentKeywords();
   await reloadForSource(state.source);
 

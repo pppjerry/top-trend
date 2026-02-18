@@ -28,6 +28,7 @@
         <button class="tab-btn tab-active" data-tab="realtime">实时榜单</button>
         <button class="tab-btn" data-tab="history">历史榜单</button>
         <button class="tab-btn" data-tab="trend">趋势分析</button>
+        <button class="tab-btn" data-tab="library">词条库</button>
       </nav>
 
       <section id="tab-realtime" class="tab-panel rounded-xl bg-white p-4 shadow">
@@ -71,7 +72,45 @@
         <div id="trendStats" class="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4"></div>
         <div id="rankChart" class="h-80"></div>
       </section>
+
+      <section id="tab-library" class="tab-panel hidden rounded-xl bg-white p-4 shadow">
+        <h2 class="mb-3 text-lg font-semibold">全词条库</h2>
+        <div class="mb-3 flex flex-wrap gap-2">
+          <input id="librarySearch" class="w-72 rounded border px-3 py-2" placeholder="搜索词条" />
+          <select id="libraryStatus" class="rounded border px-3 py-2">
+            <option value="all">全部状态</option>
+            <option value="on_list">在榜中</option>
+            <option value="off_list">已掉榜</option>
+            <option value="comeback">曾回榜</option>
+          </select>
+          <select id="librarySort" class="rounded border px-3 py-2">
+            <option value="lastSeenDesc">最近在榜</option>
+            <option value="peakRankAsc">最高排名</option>
+            <option value="durationDesc">在榜时长</option>
+            <option value="comebackDesc">回榜次数</option>
+          </select>
+        </div>
+        <div id="libraryMeta" class="mb-2 text-sm text-slate-500"></div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b text-left text-slate-500">
+                <th class="py-2">标题</th>
+                <th class="py-2">状态</th>
+                <th class="py-2">首次上榜</th>
+                <th class="py-2">最近在榜</th>
+                <th class="py-2">最高排名</th>
+                <th class="py-2">在榜时长</th>
+                <th class="py-2">回榜次数</th>
+                <th class="py-2">当前排名</th>
+                <th class="py-2">操作</th>
+              </tr>
+            </thead>
+            <tbody id="libraryTable"></tbody>
+          </table>
+        </div>
+      </section>
     </main>
-    <script src="./app.js?v=20260217-3"></script>
+    <script src="./app.js?v=20260218-1"></script>
   </body>
 </html>
