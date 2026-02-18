@@ -2,7 +2,7 @@ name: Deploy Pages
 
 on:
   workflow_run:
-    workflows: ["Scrape Hot Trends"]
+    workflows: ["Scrape Top Trends"]
     types: [completed]
   push:
     branches: ["main"]

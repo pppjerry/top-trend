@@ -10,7 +10,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(name)s - %(message)s",
 )
-logger = logging.getLogger("hot-trend")
+logger = logging.getLogger("toptrend")
 
 UTC8 = timezone(timedelta(hours=8))
 DATA_DIR = Path("data")

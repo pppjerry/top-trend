@@ -1,4 +1,4 @@
-name: Scrape Hot Trends
+name: Scrape Top Trends
 
 on:
   schedule:

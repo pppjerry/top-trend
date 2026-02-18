@@ -1,6 +1,6 @@
-# HotTrend
+# TopTrend
 
-HotTrend 是一个零成本热榜追踪项目：
+TopTrend 是一个零成本热榜追踪项目：
 
 - GitHub Actions 定时抓取微博热搜（每 20 分钟）
 - 数据保存为 JSON 并持续提交到仓库
@@ -77,7 +77,7 @@ python -m http.server 8000
 
 ### 1) 推送代码
 
-把 `github/hot-trend` 目录作为仓库根目录推送到 GitHub（或在该目录初始化 git 仓库后 push）。
+把当前项目目录作为仓库根目录推送到 GitHub（或在该目录初始化 git 仓库后 push）。
 
 ### 2) 启用定时抓取
 

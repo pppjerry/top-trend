@@ -4,7 +4,7 @@ function getDataBase() {
   return window.location.pathname.includes("/web/") ? "../data" : "./data";
 }
 const DATA_BASE = getDataBase();
-const RECENT_KEYWORDS_KEY = "hottrend:recent-keywords";
+const RECENT_KEYWORDS_KEY = "toptrend:recent-keywords";
 const MAX_RECENT_KEYWORDS = 5;
 
 const state = {
