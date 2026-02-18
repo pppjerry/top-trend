@@ -1,5 +1,6 @@
 import time
 import logging
+from urllib.parse import quote
 
 import requests
 
@@ -63,11 +64,13 @@ class WeiboScraper(BaseScraper):
 
         items = []
         for idx, entry in enumerate(realtime):
+            title = (entry.get("word") or entry.get("note") or "").strip()
+            encoded_title = quote(title)
             item = {
                 "rank": idx + 1,
-                "title": entry.get("word", entry.get("note", "")),
+                "title": title,
                 "hotValue": entry.get("num", 0),
-                "url": f"https://s.weibo.com/weibo?q=%23{entry.get('word', '')}%23",
+                "url": f"https://s.weibo.com/weibo?q=%23{encoded_title}%23" if title else "",
             }
             label_name = entry.get("label_name")
             if label_name:

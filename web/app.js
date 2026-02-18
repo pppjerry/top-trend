@@ -261,6 +261,10 @@ function itemStatusLabel(status, comebackCount) {
   return `<span class="text-slate-500">已掉榜</span>`;
 }
 
+function normalizeKeyword(text) {
+  return String(text || "").trim().toLowerCase();
+}
+
 function renderRealtime(dayData) {
   const listEl = document.getElementById("realtimeTable");
   const snapshots = dayData.snapshots || [];
@@ -339,7 +343,18 @@ function renderLibrary() {
   const filtered = getLibraryFilteredItems();
 
   const total = state.currentLibrary?.totalItems || 0;
-  metaEl.textContent = `共 ${total} 个词条，当前筛选后 ${filtered.length} 个。生成时间: ${formatDateTime(generatedAt)}`;
+  const hasSnapshots = (state.index?.dates?.[state.source] || []).length > 0;
+  const generatedText = generatedAt ? formatDateTime(generatedAt) : "-";
+  const pendingHint =
+    total === 0 && hasSnapshots
+      ? " 当前词条库尚未生成，等待下一次抓取任务或手动运行 `python main.py`。"
+      : "";
+  metaEl.textContent = `共 ${total} 个词条，当前筛选后 ${filtered.length} 个。生成时间: ${generatedText}.${pendingHint}`;
+
+  if (!total) {
+    tableEl.innerHTML = `<tr><td colspan="9" class="py-3 text-slate-400">词条库暂无数据，请等待抓取任务完成后刷新页面。</td></tr>`;
+    return;
+  }
 
   if (!filtered.length) {
     tableEl.innerHTML = `<tr><td colspan="9" class="py-3 text-slate-400">暂无匹配词条</td></tr>`;
@@ -386,8 +401,13 @@ function setupLibraryControls() {
 
 function collectSeries(snapshots, keyword) {
   const points = [];
+  const normalizedKeyword = normalizeKeyword(keyword);
+  if (!normalizedKeyword) return points;
+
   for (const snap of snapshots || []) {
-    const found = (snap.items || []).find((i) => i.title.includes(keyword));
+    const items = snap.items || [];
+    const exactMatch = items.find((i) => normalizeKeyword(i.title) === normalizedKeyword);
+    const found = exactMatch || items.find((i) => normalizeKeyword(i.title).includes(normalizedKeyword));
     if (found) {
       points.push({
         timestamp: snap.timestamp,
