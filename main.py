@@ -4,8 +4,6 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from collections import defaultdict
 
-from scrapers import ALL_SCRAPERS
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(name)s - %(message)s",
@@ -175,11 +173,13 @@ def build_item_library(source: str) -> None:
 
         for title in current_seen:
             row = info_by_title.get(title)
+            url = str(current_map[title].get("url") or "").strip()
             if row is None:
                 row = {
                     "title": title,
                     "firstSeenAt": snapshot["timestamp"],
                     "lastSeenAt": snapshot["timestamp"],
+                    "url": url,
                     "peakRank": current_map[title].get("rank"),
                     "appearanceCount": 0,
                     "comebackCount": 0,
@@ -189,6 +189,8 @@ def build_item_library(source: str) -> None:
                 row["comebackCount"] += 1
 
             row["lastSeenAt"] = snapshot["timestamp"]
+            if url:
+                row["url"] = url
             row["appearanceCount"] += 1
 
             rank = current_map[title].get("rank")
@@ -220,12 +222,15 @@ def build_item_library(source: str) -> None:
     result_items = []
     for title, row in info_by_title.items():
         latest_item = latest_map.get(title, {})
+        latest_url = str(latest_item.get("url") or "").strip() if title in latest_seen else ""
+        item_url = latest_url or str(row.get("url") or "").strip()
         result_items.append(
             {
                 "title": title,
                 "status": "on_list" if title in latest_seen else "off_list",
                 "firstSeenAt": row["firstSeenAt"],
                 "lastSeenAt": row["lastSeenAt"],
+                "url": item_url,
                 "peakRank": row["peakRank"],
                 "appearanceCount": row["appearanceCount"],
                 "comebackCount": row["comebackCount"],
@@ -252,10 +257,13 @@ def build_item_library(source: str) -> None:
 
 
 def run() -> None:
+    from scrapers import ALL_SCRAPERS
+
+    all_scrapers = ALL_SCRAPERS
     total = 0
     success_sources = 0
     source_results: list[dict] = []
-    for scraper in ALL_SCRAPERS:
+    for scraper in all_scrapers:
         logger.info("Start scraping %s", scraper.name)
         try:
             items = scraper.fetch()
@@ -311,7 +319,7 @@ def run() -> None:
         except Exception:
             logger.exception("Failed to build item library for source %s", source)
 
-    all_ok = success_sources == len(ALL_SCRAPERS) and len(ALL_SCRAPERS) > 0
+    all_ok = success_sources == len(all_scrapers) and len(all_scrapers) > 0
     if all_ok:
         update_status(
             ok=True,

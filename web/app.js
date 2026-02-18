@@ -265,6 +265,11 @@ function normalizeKeyword(text) {
   return String(text || "").trim().toLowerCase();
 }
 
+function resolveItemUrl(item) {
+  if (!item) return "";
+  return String(item.url || "").trim();
+}
+
 function renderRealtime(dayData) {
   const listEl = document.getElementById("realtimeTable");
   const snapshots = dayData.snapshots || [];
@@ -363,8 +368,14 @@ function renderLibrary() {
 
   tableEl.innerHTML = filtered
     .map(
-      (item) => `<tr class="border-b">
-        <td class="py-2">${item.title || "-"}</td>
+      (item) => {
+        const title = item.title || "-";
+        const itemUrl = resolveItemUrl(item);
+        const titleCell = itemUrl
+          ? `<a class="text-blue-600 hover:underline" href="${itemUrl}" target="_blank">${title}</a>`
+          : title;
+        return `<tr class="border-b">
+        <td class="py-2">${titleCell}</td>
         <td class="py-2">${itemStatusLabel(item.status, item.comebackCount || 0)}</td>
         <td class="py-2">${formatDateTime(item.firstSeenAt)}</td>
         <td class="py-2">${formatDateTime(item.lastSeenAt)}</td>
@@ -377,7 +388,8 @@ function renderLibrary() {
             趋势分析
           </button>
         </td>
-      </tr>`,
+      </tr>`;
+      },
     )
     .join("");
 
