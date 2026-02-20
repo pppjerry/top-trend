@@ -1,13 +1,13 @@
 {
   "ok": true,
-  "lastRunAt": "2026-02-20T07:57:48+08:00",
-  "lastSuccessAt": "2026-02-20T07:57:48+08:00",
-  "message": "All sources succeeded. Total items: 51",
+  "lastRunAt": "2026-02-20T10:42:33+08:00",
+  "lastSuccessAt": "2026-02-20T10:42:33+08:00",
+  "message": "All sources succeeded. Total items: 50",
   "sourceResults": [
     {
       "source": "weibo",
       "ok": true,
-      "count": 51,
+      "count": 50,
       "error": ""
     }
   ]
