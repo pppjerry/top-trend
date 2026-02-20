@@ -36,10 +36,41 @@ def ensure_json(path: Path, default: dict) -> dict:
         return default
 
 
+def _format_json_mixed(value, indent: int = 0, parent_key: str | None = None) -> str:
+    pad = "  " * indent
+    next_pad = "  " * (indent + 1)
+
+    if isinstance(value, dict):
+        if not value:
+            return "{}"
+        parts = []
+        for key, val in value.items():
+            key_text = json.dumps(key, ensure_ascii=False)
+            val_text = _format_json_mixed(val, indent + 1, key)
+            parts.append(f"{next_pad}{key_text}: {val_text}")
+        return "{\n" + ",\n".join(parts) + f"\n{pad}" + "}"
+
+    if isinstance(value, list):
+        if not value:
+            return "[]"
+        if parent_key == "items":
+            # Keep each item compact on a single line.
+            compact = [
+                json.dumps(item, ensure_ascii=False, separators=(",", ":")) for item in value
+            ]
+            parts = [f"{next_pad}{item}" for item in compact]
+            return "[\n" + ",\n".join(parts) + f"\n{pad}" + "]"
+
+        parts = [f"{next_pad}{_format_json_mixed(item, indent + 1)}" for item in value]
+        return "[\n" + ",\n".join(parts) + f"\n{pad}" + "]"
+
+    return json.dumps(value, ensure_ascii=False)
+
+
 def write_json(path: Path, data: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
-        json.dumps(data, ensure_ascii=False, indent=2),
+        _format_json_mixed(data),
         encoding="utf-8",
     )
 
