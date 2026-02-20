@@ -1,5 +1,5 @@
 {
-  "name": "TopTrend 热榜追踪",
+  "name": "TopTrend 热榜趋势",
   "short_name": "TopTrend",
   "description": "多平台热榜采集与趋势分析",
   "start_url": "./",

@@ -1,7 +1,18 @@
 function getDataBase() {
-  // Local dev: /web/index.html => ../data
-  // GitHub Pages deploy: /index.html => ./data
-  return window.location.pathname.includes("/web/") ? "../data" : "./data";
+  const pathParts = window.location.pathname.split("/").filter(Boolean);
+  const dirParts = [...pathParts];
+  if (dirParts.length && dirParts[dirParts.length - 1].includes(".")) {
+    dirParts.pop();
+  }
+
+  // Local dev from repository root: /web/** should resolve data at repo root /data.
+  if (dirParts[0] === "web") {
+    return `${"../".repeat(dirParts.length)}data`;
+  }
+  if (!dirParts.length) return "./data";
+
+  // Deployed subpages: /weibo/ => ../data, /platforms/foo/ => ../../data.
+  return `${"../".repeat(dirParts.length)}data`;
 }
 const DATA_BASE = getDataBase();
 const RECENT_KEYWORDS_KEY = "toptrend:recent-keywords";
@@ -18,18 +29,6 @@ const state = {
   recentKeywords: [],
 };
 let rankChart = null;
-
-function sourceDisplayName(source) {
-  const map = {
-    weibo: "微博热搜",
-    zhihu: "知乎热榜",
-    bilibili: "B站热榜",
-    baidu: "百度热搜",
-    douyin: "抖音热榜",
-    toutiao: "头条热榜",
-  };
-  return map[source] || source;
-}
 
 function fmtTime(iso) {
   const d = new Date(iso);
@@ -146,18 +145,6 @@ async function fetchJson(path) {
 async function loadIndex() {
   state.index = await fetchJson(`${DATA_BASE}/index.json`);
   setLastUpdated(state.index.lastUpdated || "-");
-}
-
-function renderSourceSelect() {
-  const select = document.getElementById("sourceSelect");
-  const sources = state.index?.sources?.length ? state.index.sources : ["weibo"];
-
-  if (!sources.includes(state.source)) state.source = sources[0];
-
-  select.innerHTML = sources
-    .map((source) => `<option value="${source}">${sourceDisplayName(source)}</option>`)
-    .join("");
-  select.value = state.source;
 }
 
 async function loadStatus() {
@@ -625,18 +612,12 @@ async function bootstrap() {
   state.recentKeywords = loadRecentKeywords();
   bindTabs();
   await loadIndex();
-  renderSourceSelect();
   const status = await loadStatus();
   renderStatusBanner(status);
   setupTrendSearch();
   setupLibraryControls();
   renderRecentKeywords();
   await reloadForSource(state.source);
-
-  const sourceSelect = document.getElementById("sourceSelect");
-  sourceSelect.onchange = async () => {
-    await reloadForSource(sourceSelect.value);
-  };
 }
 
 bootstrap().catch((err) => {
