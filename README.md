@@ -15,9 +15,9 @@ TopTrend 是一个零成本热榜追踪项目：
 - **数据索引**: `data/index.json` 提供日期和平台索引
 - **状态跟踪**: `data/status.json` 记录最近运行是否成功
 - **前端展示**:
-  - 实时热榜（排名变化、热度）
-  - 关键词趋势分析（折线图）
-  - 历史回顾（日期和快照切换）
+  - 首页：项目说明 + 平台入口（不承载交互）
+  - 平台子页面（当前：`/weibo/`）：实时榜单、历史回顾、趋势分析、词条库
+  - 抓取状态提示（失败/长时间未更新）
 
 ## 目录结构
 
@@ -37,8 +37,13 @@ TopTrend 是一个零成本热榜追踪项目：
 │   └── weibo.py
 ├── web/
 │   ├── index.html
+│   ├── weibo/
+│   │   └── index.html
 │   ├── app.js
-│   └── style.css
+│   ├── style.css
+│   ├── manifest.webmanifest
+│   ├── robots.txt
+│   └── sitemap.xml
 ├── main.py
 └── requirements.txt
 ```
@@ -48,13 +53,13 @@ TopTrend 是一个零成本热榜追踪项目：
 ### 1) 安装依赖
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ### 2) 手动执行一次抓取
 
 ```bash
-python main.py
+python3 main.py
 ```
 
 执行后会更新：
@@ -66,12 +71,19 @@ python main.py
 ### 3) 本地查看网页
 
 ```bash
-python -m http.server 8000
+python3 -m http.server 8000
 ```
 
 打开：
 
 - `http://localhost:8000/web/`
+- `http://localhost:8000/web/weibo/`（推荐：平台交互页）
+
+## 分支协作约定
+
+- 日常开发请从 `master` 拉出开发分支（如 `feat/xxx`、`fix/xxx`）。
+- 功能完成后通过 PR 合并回 `master`，保持 `master` 始终为最新稳定版本。
+- 避免直接在 `master` 上进行日常改动。
 
 ## GitHub 上线步骤
 
@@ -90,7 +102,7 @@ python -m http.server 8000
 
 - 仓库 `Settings -> Pages`
 - `Build and deployment -> Source` 选择 **GitHub Actions**
-- 之后每次 `main` 分支 push（涉及 `web/**` 或 `data/**`）会自动触发 `.github/workflows/deploy-pages.yml`
+- 由 `.github/workflows/deploy-pages.yml` 定义触发条件（请以工作流文件为准）
 
 ### 4) 访问页面
 
